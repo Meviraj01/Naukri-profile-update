@@ -1,7 +1,3 @@
-VS Code: install path in local C:\Users\mevir\AppData\Local\Programs\Microsoft VS Code
-
-NodeJS in path C:\Program Files\nodejs\
-
 
 =================================================================================
 # VS-Code Playwright with python
