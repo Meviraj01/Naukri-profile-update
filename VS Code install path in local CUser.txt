@@ -69,7 +69,7 @@ def update_profile():
 
 update_profile()
 print("Profile updated")
-
+#will execute this code every 1 hour as hardcoded
 while True:
     try:
         update_profile()
@@ -80,7 +80,7 @@ while True:
         print(f"Error: {e}")
         time.sleep(60)  # Wait 1 minute before retrying
 
-
+#If required then can handle with scheduler too 
 #schedule.every(1).hours.do(update_profile)
 #while True:
  #   schedule.run_pending()
