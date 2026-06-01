@@ -1,0 +1,91 @@
+VS Code: install path in local C:\Users\mevir\AppData\Local\Programs\Microsoft VS Code
+
+NodeJS in path C:\Program Files\nodejs\
+
+
+=================================================================================
+# VS-Code Playwright with python
+
+from playwright.sync_api import sync_playwright # pyright: ignore[reportMissingImports]
+import schedule
+import time
+
+def update_profile():
+#print("Running profile update...")
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+        headless=False,
+        args=["--start-maximized"]
+        )
+        
+        context = browser.new_context(
+        no_viewport=True
+        )
+        page = context.new_page()
+
+        # Open website
+        page.goto("https://www.naukri.com/nlogin/login?err=1")
+
+        # Login
+        page.fill("#usernameField", "enter your username")
+        page.fill("#passwordField", "enter your password")
+        page.click("button[type='submit']")
+
+
+        page.get_by_text("View profile").click()
+        page.locator("span.edit.icon").first.click()#save button
+        page.locator("form[name='resumeHeadlineForm'] button[type='submit']").click()
+        page.wait_for_timeout(4000)
+        page.goto("https://www.naukri.com/mnjuser/profile")
+        page.wait_for_timeout(4000)
+        
+        page.keyboard.press("ArrowDown")
+        page.keyboard.press("ArrowDown")
+        page.keyboard.press("ArrowDown")
+        page.keyboard.press("ArrowDown")
+    
+        page.locator("//span[@class='text' and text()='Profile summary']").click()
+        page.wait_for_timeout(4000)
+
+
+        page.locator("span:has-text('Profile summary') + .edit.icon").click()
+        page.locator("form[name='profileSummaryForm'] button[type='submit']").click()
+        page.wait_for_timeout(4000)
+        
+        #success_msg = page.locator("p.msg")
+        #success_msg.wait_for(state="visible")
+        #print("Response:", success_msg.text_content())
+
+
+    
+        #page.keyboard.press("End")
+        
+        #page.locator("span:has-class('Profile summary').click()
+        #profile_summary_edit = page.locator(
+        #"//span[text()='Profile summary']/following-sibling::span[contains(@class,'edit')]"
+        #)
+        #profile_summary_edit.scroll_into_view_if_needed()
+    
+        #page.locator("//span[@class='text' and text()='Profile summary']").click()
+        #page.wait_for_timeout(3000)
+
+
+update_profile()
+print("Profile updated")
+
+while True:
+    try:
+        update_profile()
+        print("Waiting for 1 hour...")
+        time.sleep(3600)  # 3600 seconds = 1 hour
+
+    except Exception as e:
+        print(f"Error: {e}")
+        time.sleep(60)  # Wait 1 minute before retrying
+
+
+#schedule.every(1).hours.do(update_profile)
+#while True:
+ #   schedule.run_pending()
+  #  time.sleep(1)
